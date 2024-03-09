@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+struct Task {
+    std::string description;
+    bool completed;
+
+    Task(const std::string& desc, bool comp) : description(desc), completed(comp) {}
+};
+
+std::vector<Task> tasks;
+
+void addTask(const std::string& desc) {
+    tasks.push_back(Task(desc, false));
+}
+
+void viewTasks() {
+    for (size_t i = 0; i < tasks.size(); ++i) {
+        std::cout << i + 1 << ". " << (tasks[i].completed ? "[x] " : "[ ] ") << tasks[i].description << std::endl;
+    }
+}
+
+void markTaskAsCompleted(size_t index) {
+    if (index > 0 && index <= tasks.size()) {
+        tasks[index - 1].completed = true;
+    } else {
+        std::cout << "Invalid task index." << std::endl;
+    }
+}
+
+void removeTask(size_t index) {
+    if (index > 0 && index <= tasks.size()) {
+        tasks.erase(tasks.begin() + index - 1);
+    } else {
+        std::cout << "Invalid task index." << std::endl;
+    }
+}
+
+int main() {
+    while (true) {
+        std::cout << "To-Do List Manager\n===================\n";
+        std::cout << "1. Add task\n2. View tasks\n3. Mark task as completed\n4. Remove task\n5. Quit\n";
+        std::cout << "> ";
+
+        int choice;
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::string desc;
+                std::cout << "Enter task description: ";
+                std::cin.ignore();
+                std::getline(std::cin, desc);
+                addTask(desc);
+                break;
+            }
+            case 2: {
+                viewTasks();
+                break;
+            }
+            case 3: {
+                size_t index;
+                std::cout << "Enter task index to mark as completed: ";
+                std::cin >> index;
+                markTaskAsCompleted(index);
+                break;
+            }
+            case 4: {
+                size_t index;
+                std::cout << "Enter task index to remove: ";
+                std::cin >> index;
+                removeTask(index);
+                break;
+            }
+            case 5: {
+                std::cout << "Goodbye!" << std::endl;
+                return 0;
+            }
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    }
+
+    return 0;
+}
